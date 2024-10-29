@@ -11,16 +11,20 @@ class Solution {
     /* Returns count of pairs with difference k  */
     int countPairsWithDiffK(vector<int>& arr, int k) {
         // code here
-        int ans=0;
-        sort(arr.begin(),arr.end());
-        int n=arr.size();
-        unordered_map<int,int>mp;
-        for(int i=0;i<n;i++)
-        {
-            ans+=mp[arr[i]-k];
-            mp[arr[i]]++;
-        }
-        return ans;
+        int cnt=0;
+       int i=0;
+       int j=0;
+       int n=arr.size();
+       sort(arr.begin(),arr.end());
+       while(i<n)
+       {
+          int x=lower_bound(arr.begin(),arr.end(),arr[i]-k)-arr.begin();
+          int y=upper_bound(arr.begin(),arr.end(),arr[i]-k)-arr.begin();
+          cnt+=y-x;
+          i++;
+          
+       }
+       return cnt;
     }
 };
 
