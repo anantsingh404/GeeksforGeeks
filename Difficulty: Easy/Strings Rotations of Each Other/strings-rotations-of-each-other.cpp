@@ -31,7 +31,7 @@ class Solution {
     // Function to check if two strings are rotations of each other or not.
     bool areRotations(string &text, string &pattern) {
         // Your code here
-        text=text+"$"+text+text;
+        text=text+text;
             int m = pattern.size();
     int n = text.size();
     vector<int> lps = buildLPS(pattern);
