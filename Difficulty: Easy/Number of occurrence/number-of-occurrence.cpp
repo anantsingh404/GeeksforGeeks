@@ -11,14 +11,9 @@ class Solution {
     int countFreq(vector<int>& arr, int target) {
         // code here
         int count=0;
-        for(int i=0;i<arr.size();i++)
-        {
-            if(arr[i]==target)
-            {
-                ++count;
-            }
-        }
-        return count;
+        int x=lower_bound(arr.begin(),arr.end(),target)-arr.begin();
+         int y=upper_bound(arr.begin(),arr.end(),target)-arr.begin()-x;
+        return y;
     }
 };
 
