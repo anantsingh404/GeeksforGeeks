@@ -4,35 +4,47 @@ using namespace std;
 
 
 // } Driver Code Ends
+
 class Solution {
   public:
     int findSubString(string& str) {
-        // Your code goes here
-          unordered_map<char,int>mp;
-        for(auto &it:str){
-            mp[it]++;
-        }
-        int total=mp.size();
-        mp.clear(); 
-        int i=0,j=0,minlen=INT_MAX;
+        // code here
+        set<char>st(str.begin(),str.end());
+        int m=st.size();
         int n=str.size();
-        while(j<n){
-            mp[str[j]]++;
-            while(mp.size()==total){
-                minlen=min(minlen,j-i+1);
-               mp[str[i]]--;
-               if(mp[str[i]]==0)mp.erase(str[i]);
-                i++;
+        unordered_map<char,int>mp;
+        st.clear();
+        int i=0;
+        int j=0;
+        int ans=n;
+        while(i<n)
+        {
+            mp[str[i]]++;
+            st.insert(str[i]);
+            while(j<i &&  st.size()==m && mp[str[j]]>1)
+            {
+                --mp[str[j]];
+                ans=min(ans,i-j);
+               
+                if(mp[str[j]]==0)
+                {
+                    st.erase(str[j]);
+                }
+                 j++;
             }
-            
-            j++;
-        }   
-        return minlen;
+            if(st.size()==m)
+            {
+                ans=min(ans,i-j+1);
+            }
+            i++;
+        }
+        return ans;
     }
 };
 
+
 //{ Driver Code Starts.
-//   Driver code
+//      Driver code
 int main() {
     int t;
     cin >> t;
