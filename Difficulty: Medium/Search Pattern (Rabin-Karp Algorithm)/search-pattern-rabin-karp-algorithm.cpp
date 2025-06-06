@@ -23,8 +23,7 @@ class Solution {
         long long cur_h = (h[i+S] + m - h[i]) % m;
         if (cur_h == h_s * p_pow[i] % m)
             occurrences.push_back(i+1);
-           // occurrences.push_back(i+S);
-           // break;
+           
     }
     return occurrences;
     }
