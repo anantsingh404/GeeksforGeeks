@@ -1,37 +1,55 @@
 class Solution {
   public:
-    string findSum(string &s1,string &s2){
-        string ans="";
-        int i=s1.size()-1,j=s2.size()-1,carry=0,sum,rem;
-        while(i>=0 || j>=0 || carry){
-            sum=(i>=0?s1[i--]-'0':0)+(j>=0?s2[j--]-'0':0)+carry;
-            rem=sum%10;
-            carry=sum/10;
-            ans.push_back(rem+'0');
-        }
-        reverse(ans.begin(),ans.end());
-        return ans;
+  string stringAdd(const string &a, const string &b) {
+    string res;
+    int carry = 0, i = a.size() - 1, j = b.size() - 1;
+
+    while (i >= 0 || j >= 0 || carry) {
+        int sum = carry;
+
+        if (i >= 0) sum += a[i--] - '0';
+        if (j >= 0) sum += b[j--] - '0';
+
+        res.push_back((sum % 10) + '0');
+        carry = sum / 10;
     }
-    bool solve(string &s,int pos, int ln1,int ln2){
-        string s1=s.substr(pos,ln1);
-        string s2=s.substr(pos+ln1,ln2);
-        string sum=findSum(s1,s2);
-        if(sum.size()>s.size()-(pos+ln1+ln2))return false;
-        
-        if(sum==s.substr(pos+ln1+ln2,sum.size())){
-            if(sum.size()==s.size()-(pos+ln1+ln2))return true;
-            return solve(s,pos+ln1,ln2,sum.size());
-        }
+
+    reverse(res.begin(), res.end());
+    return res;
+}
+bool isValidSumString(const string &s, string a, string b, int start) {
+    if (start == s.size()) {
+        return true;
+    }
+
+    string sum = stringAdd(a, b);
+    int sumLen = sum.length();
+
+    if (start + sumLen > s.length() || s.substr(start, sumLen) != sum) {
         return false;
     }
-    bool isSumString(string &S) {
+
+    return isValidSumString(s, b, sum, start + sumLen);
+}
+    bool isSumString(string &s) {
         // code here
-          for(int i=1;i<S.size();i++){
-            for(int j=1;j<=S.size()-i;j++){
-                if(solve(S,0,i,j))return 1;
+       int n = s.size();
+
+    for (int i = 1; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            string a = s.substr(0, i);
+            string b = s.substr(i, j - i);
+
+            // Skip leading zero cases
+            if ((a.size() > 1 && a[0] == '0') || (b.size() > 1 && b[0] == '0')) {
+                continue;
             }
-        } 
-        return 0;
-        
+
+            if (isValidSumString(s, a, b, j)) {
+                return true;
+            }
+        }
+    }
+    return false;
     }
 };
