@@ -6,13 +6,8 @@ class Solution {
         int dig=0;
         while(i<s.size())
         {
-            dig=dig*10+s[i]-'0';
-            if(dig>=13)
-            {
-                dig=dig%13;
-            }
+            dig=(dig*10+s[i]-'0')%13;
             i++;
-            
         }
         if(dig==0)
         {
