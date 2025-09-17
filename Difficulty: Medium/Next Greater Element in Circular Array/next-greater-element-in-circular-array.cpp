@@ -1,9 +1,7 @@
 class Solution {
   public:
-    vector<int> nextLargerElement(vector<int> &arr) {
+    vector<int> nextGreater(vector<int> &arr) {
         // code here
-      
-            
         stack<int>st;
         int n=arr.size();
         vector<int>ans(n,0);
