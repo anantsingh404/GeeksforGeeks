@@ -1,75 +1,37 @@
-//{ Driver Code Starts
-// Initial Template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
-
 class Solution {
   public:
     string decodedString(string &s) {
-        // code here
-         string ans;
-    stack<string> st;
-    int n = s.size();
-    
-    for (int i = 0; i < n; i++) {
-        if (s[i] == ']') {
-            string decodedStr;
-            
-            while (!st.empty() && st.top() != "[") {
-                decodedStr = st.top() + decodedStr;
+        
+      stack<string> st;
+        int len=s.length();
+        for(int i=0;i<len;i++){
+            if(s[i]==']'){
+                string str;
+                while(st.top()!="["){
+                    str=st.top()+str;
+                    st.pop();
+                } 
+                st.pop();
+           string numStr;
+            while (!st.empty() && st.top().size() == 1 && isdigit(st.top()[0])) {
+                numStr += st.top();
                 st.pop();
             }
-            
-            st.pop(); // Remove '['
-            
-            string num = "";
-            while (!st.empty() && isdigit(st.top()[0])) {
-                num = st.top() + num;
-                st.pop();
+            reverse(numStr.begin(), numStr.end()); 
+            int num = stoi(numStr);
+                string res;
+                for(int k=0;k<num;k++)
+                 res+=str;
+                st.push(res);
+            } else {
+                st.push(string("") + s[i]);
             }
-            
-            int repeatCount = stoi(num);
-            string expandedStr;
-            for (int j = 0; j < repeatCount; j++) {
-                expandedStr += decodedStr;
-            }
-            
-            st.push(expandedStr);
-        } else {
-            st.push(string(1, s[i]));
         }
-    }
-    
-    while (!st.empty()) {
-        ans = st.top() + ans;
-        st.pop();
-    }
-    
-    return ans;
+        string res;
+        while(!st.empty()){
+            res=st.top()+res;
+            st.pop();
+        }
+        return res;  
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        string s;
-        cin >> s;
-
-        Solution ob;
-        cout << ob.decodedString(s) << "\n";
-
-        cout << "~"
-             << "\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
