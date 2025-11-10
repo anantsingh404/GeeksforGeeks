@@ -13,11 +13,7 @@ class Solution {
           
       }
       int ans=0;
-      if(state==1 && idx==n-1)
-      {
-          ans=solve(idx+2,0,arr,dp)+arr[idx];
-      }
-      else if(state==1)
+     if(state==1)
       {
           ans=max(solve(idx+1,state,arr,dp),solve(idx+2,0,arr,dp)+arr[idx]);
       }
