@@ -1,118 +1,147 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-// design the class in the most optimal way
-
+class dll{
+    public:
+    int data;
+    dll * left;
+    dll * right;
+    dll(int x)
+    {
+        left=NULL;
+        right=NULL;
+        data=x;
+    }
+};
 class LRUCache {
-  private:
   public:
-  int s=0;
-  deque<int>q;
-  unordered_map<int,int>mp;
-    // Constructor for initializing the cache capacity with the given value.
-    LRUCache(int cap) {
-        // code here
-        s=cap;
-        
+       int cap;
+    unordered_map<int,dll *>mp;
+    unordered_map<int,int>mp1;
+    dll * end=NULL;
+    dll * first=NULL;
+
+    LRUCache(int ca) {
+        cap = ca;
     }
 
-    // Function to return value corresponding to the key.
     int get(int key) {
-        // your code here
-        if(mp[key]<1)
+        if(mp.find(key)!=mp.end())
         {
-            return -1;
-        }
-        else{
-            vector<int>vp;
-            while(q.back()!=key)
-            {
-                vp.push_back(q.back());
-                q.pop_back();
-            }
-            q.pop_back();
-            reverse(vp.begin(),vp.end());
-            for(int i=0;i<vp.size();i++)
-            {
-                q.push_back(vp[i]);
-            }
-            q.push_back(key);
-        return mp[key];
-        }
-    }
+            dll * temp = mp[key];
+            dll * x = new dll(key);
 
-    // Function for storing key-value pair.
-    void put(int key, int value) {
-        // your code here
-        if(mp[key])
-        {
-           vector<int>vp;
-            while(q.back()!=key)
-            {
-                vp.push_back(q.back());
-                q.pop_back();
+            // unlink temp
+            if(temp == first) {
+                first = temp->right;
             }
-            q.pop_back();
-            reverse(vp.begin(),vp.end());
-            for(int i=0;i<vp.size();i++)
-            {
-                q.push_back(vp[i]);
+            if(temp == end) {
+                end = temp->left;
             }
-            q.push_back(key); 
-            mp[key]=value;
-        }
-        else if(s==q.size())
-        {   int x=q.front();
-            q.pop_front();
-            mp.erase(x);
-            q.push_back(key);
-            mp[key]=value;
-            
-            
+            if(temp->left) {
+                temp->left->right = temp->right;
+            }
+            if(temp->right) {
+                temp->right->left = temp->left;
+            }
+
+            delete temp; // IMPORTANT
+
+            // insert x at end
+            if(end)
+            {
+                end->right = x;
+                x->left = end;
+                end = x;
+            }
+            else
+            {
+                end = x;
+                first = x;
+            }
+
+            mp[key] = end;     // update map
+            return mp1[key];
         }
         else
         {
-           q.push_back(key);
-            mp[key]=value; 
+            return -1;
         }
     }
-};
 
-//{ Driver Code Starts.
+    void put(int key, int value) {
 
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
+        if(mp.find(key)!=mp.end())
+        {
+            dll * temp = mp[key];
+            dll * x = new dll(key);
 
-        int capacity;
-        cin >> capacity;
-        LRUCache *cache = new LRUCache(capacity);
-
-        int queries;
-        cin >> queries;
-        while (queries--) {
-            string q;
-            cin >> q;
-            if (q == "PUT") {
-                int key;
-                cin >> key;
-                int value;
-                cin >> value;
-                cache->put(key, value);
-            } else {
-                int key;
-                cin >> key;
-                cout << cache->get(key) << " ";
+            // unlink temp
+            if(temp == first) {
+                first = temp->right;
             }
-        }
-        cout << endl;
-        cout << "~" << endl;
-    }
-    return 0;
-}
+            if(temp == end) {
+                end = temp->left;
+            }
+            if(temp->left) {
+                temp->left->right = temp->right;
+            }
+            if(temp->right) {
+                temp->right->left = temp->left;
+            }
 
-// } Driver Code Ends
+            delete temp;
+
+            // add new node at end
+            if(end)
+            {
+                end->right = x;
+                x->left = end;
+                end = x;
+            }
+            else
+            {
+                end = x;
+                first = x;
+            }
+
+            mp[key] = end;
+            mp1[key] = value;
+        }
+        else
+        {
+            // if full → remove LRU (first)
+            if(cap == 0)
+            {
+                dll * x = first;
+
+                mp.erase(x->data);
+
+                first = x->right;
+                if(first) first->left = NULL;
+                else end = NULL;    // list empty now
+
+                delete x;
+                cap++;
+            }
+
+            // insert new node
+            dll * x = new dll(key);
+
+            if(end)
+            {
+                end->right = x;
+                x->left = end;
+                end = x;
+            }
+            else
+            {
+                first = x;
+                end = x;
+            }
+
+            mp[key] = end;
+            mp1[key] = value;
+
+            cap--;
+        }
+    }
+
+};
