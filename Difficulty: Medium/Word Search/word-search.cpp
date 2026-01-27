@@ -1,13 +1,6 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
   
-
 int m ,n ;
     vector<vector<int>> directions = {{1,0},{-1,0},{0,-1},{0,1}};
     bool solve(int i,int j,int k,string &word,vector<vector<bool>> &visited,vector<vector<char>> &mat) {
@@ -42,7 +35,8 @@ int m ,n ;
         for(int i=0; i<m; i++) {
             for(int j=0; j<n; j++) {
                 if(mat[i][j] == word[0]){
-                    if(solve(i,j,0,word,visited,mat)) {
+                    if(solve(i,j,0,word,visited,mat)) 
+                    {
                         return true;
                     }
                 }
@@ -50,31 +44,5 @@ int m ,n ;
         }
         return false;
     }
+
 };
-
-//{ Driver Code Starts.
-int main() {
-    int tc;
-    cin >> tc;
-    while (tc--) {
-        int n, m;
-        cin >> n >> m;
-        vector<vector<char>> mat(n, vector<char>(m, '*'));
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++)
-                cin >> mat[i][j];
-        string word;
-        cin >> word;
-        Solution obj;
-        bool ans = obj.isWordExist(mat, word);
-        if (ans)
-            cout << "true\n";
-        else
-            cout << "false\n";
-
-        cout << "~"
-             << "\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
