@@ -2,8 +2,7 @@ class Solution {
   public:
     int getLastMoment(int n, vector<int>& left, vector<int>& right) {
         // code here
-        
-        int ans=0;
+         int ans=0;
         for(int i=0;i<left.size();i++)
         {
             ans=max(ans,left[i]);
