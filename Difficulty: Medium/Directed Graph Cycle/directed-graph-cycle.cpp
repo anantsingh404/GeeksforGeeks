@@ -1,83 +1,44 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
 class Solution {
   public:
-  bool solve(int i,vector<int>adj[],vector<int>&vis)
-  {   
-      vis[i]=2;
-       
-      for(auto itr:adj[i])
+  bool check(int idx,vector<vector<int>>&adj,vector<int>&vis)
+  {
+      vis[idx]=2;
+      for(auto itr:adj[idx])
       {
           if(vis[itr]==2)
           {
-              return true;
+            return true;  
           }
-          else if(vis[itr]==0 && solve(itr,adj,vis))
+          if(check(itr,adj,vis))
           {
               return true;
           }
-          
+         
       }
-      vis[i]=1;
-      return false;
-      
+     
+      vis[idx]=1;
+       return false;
   }
-    bool isCyclic(int V, vector<vector<int>> &edges) {
+    bool isCyclic(int n, vector<vector<int>> &edge) {
         // code here
-        vector<int>vis(V,0);
-        vector<int>adj[V];
-        int n=edges.size();
-        for(int i=0;i<n;i++)
+        vector<int>vis(n,0);
+        vector<vector<int>>adj(n);
+        for(int i=0;i<edge.size();i++)
         {
-            int x=edges[i][0];
-            int y=edges[i][1];
+            int x=edge[i][0];
+            int y=edge[i][1];
             adj[x].push_back(y);
         }
-        for(int i=0;i<V;i++)
+        for(int i=0;i<n;i++)
         {
             if(vis[i]==0)
             {
-                if(solve(i,adj,vis))
+                if(check(i,adj,vis))
                 {
                     return true;
                 }
             }
         }
         return false;
-        
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int tc;
-    cin >> tc;
-    cin.ignore();
-    while (tc--) {
-        int V, E;
-        cin >> V >> E;
-        cin.ignore();
-        vector<vector<int>> edges;
-        for (int i = 1; i <= E; i++) {
-            int u, v;
-            cin >> u >> v;
-            edges.push_back({u, v});
-        }
-
-        Solution obj;
-        bool ans = obj.isCyclic(V, edges);
-        if (ans)
-            cout << "true\n";
-        else
-            cout << "false\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
