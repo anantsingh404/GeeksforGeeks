@@ -2,7 +2,7 @@ class Solution {
   public:
     int maxOnes(vector<int>& arr, int k) {
         // code here
-          int i = 0, j = 0,cnt = 0 , ans = 0;
+        int i = 0, j = 0,cnt = 0 , ans = 0;
         while(j < arr.size()){
             if(arr[j] == 0){
                 cnt++;
