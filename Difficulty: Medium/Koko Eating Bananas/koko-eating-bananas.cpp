@@ -1,39 +1,37 @@
 class Solution {
   public:
-  bool check(int mid,vector<int>&arr,int k)
+  bool Check(long long mid,vector<int>&arr,long long k)
   {
-      int n=arr.size();
-      for(int i=0;i<n;i++)
+      long long hc=0;
+      for(int i=0;i<arr.size();i++)
       {
-         k-=(arr[i]/mid);
-         if(arr[i]%mid)
-         {
-             --k;
-         }
-         
+       if(arr[i]%mid)
+      {
+          ++hc;
       }
-      return k>=0;
+      hc+=arr[i]/mid;
+      }
+  return hc<=k;
   }
   
     int kokoEat(vector<int>& arr, int k) {
         // Code here
-        int n=arr.size();
-       int mini=1;
-       int maxi=1e7;
-       int ans=INT_MAX;
-       while(mini<=maxi)
-       {
-           int  mid=(mini+maxi)/2;
-           if(check(mid,arr,k))
-           {   // cout<<mid<<endl;
-               ans=mid;
-               maxi=mid-1;
-           }
-           else
-           {
-               mini=mid+1;
-           }
-       }
-        return ans;
+        long long mini=1;
+        long long maxi=INT_MAX;
+        long long ans=INT_MAX;
+        while(mini<=maxi)
+        {
+            long long mid=(mini+maxi)/2;
+            if(Check(mid,arr,k))
+            {
+                ans=mid;
+                maxi=mid-1;
+            }
+            else
+            {
+                mini=mid+1;
+            }
+        }
+        return (int)ans;
     }
 };
