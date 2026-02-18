@@ -1,90 +1,77 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
-  long long  mg(vector<int>&arr, long long l, long long  r, long long mid)
+    long long merge(vector<int>& arr, int l, int mid, int r)
 {
-    long long  arr1[r - l + 1];
-    int k = 0;
     long long count = 0;
+
+    // count inversions using upper_bound
+    int i = mid + 1;
+    while (i <= r)
+    {
+        int x = upper_bound(arr.begin() + l,
+                            arr.begin() + mid + 1,
+                            arr[i]) - arr.begin();
+
+        count += (mid + 1 - x);
+        i++;
+    }
+
+    // normal merge (NO inversion counting here)
+    vector<int> temp(r - l + 1);
     int p = l;
     int q = mid + 1;
+    int k = 0;
 
-    for (int i = p; i <= r; i++)
+    while (p <= mid && q <= r)
     {
-        if (p > mid)
+        if (arr[p] <= arr[q])
         {
-            arr1[k++] = arr[q++];
-        }
-        else if (q > r)
-        {
-            arr1[k++] = arr[p++];
-        }
-        else if (arr[p] <= arr[q])
-        {
-            arr1[k++] = arr[p++];
+            temp[k++] = arr[p++];
         }
         else
         {
-            count += mid - p + 1;
-            arr1[k++] = arr[q++];
+            temp[k++] = arr[q++];
         }
     }
-    for (int p = 0; p < k; p++)
+
+    while (p <= mid)
     {
-        arr[l++] = arr1[p];
+        temp[k++] = arr[p++];
     }
+
+    while (q <= r)
+    {
+        temp[k++] = arr[q++];
+    }
+
+    int idx = 0;
+    while (idx < k)
+    {
+        arr[l + idx] = temp[idx];
+        idx++;
+    }
+
     return count;
 }
 
-long long ms(vector<int>&arr, long long l, long long r)
+long long part(vector<int>& arr, int low, int high)
 {
-    if (l < r)
+    if (low >= high)
     {
-        long long x = 0, y = 0;
-        long long mid = l + (r - l) / 2;
-        x = ms(arr, l, mid);
-        y = ms(arr, mid + 1, r);
-        return x + y + mg(arr, l, r, mid);
+        return 0;
     }
-    return 0;
+
+    int mid = low + (high - low) / 2;
+
+    long long left = part(arr, low, mid);
+    long long right = part(arr, mid + 1, high);
+    long long cross = merge(arr, low, mid, high);
+
+    return left + right + cross;
 }
-    // Function to count inversions in the array.
     int inversionCount(vector<int> &arr) {
-        // Your Code Here
-        long long n=arr.size();
-         long long x = 0;
-    x = ms(arr, 0, n - 1);
-    return (int)x;
+        // Code Here
+        
+          return part(arr, 0, arr.size() - 1);
     }
 };
-
-//{ Driver Code Starts.
-
-int main() {
-
-    int T;
-    cin >> T;
-    cin.ignore();
-    while (T--) {
-        int n;
-        vector<int> a;
-        string input;
-        getline(cin, input);
-        stringstream ss(input);
-        int num;
-        while (ss >> num)
-            a.push_back(num);
-        Solution obj;
-        cout << obj.inversionCount(a) << endl;
-        cout << "~" << endl;
-    }
-
-    return 0;
-}
-
-// } Driver Code Ends
