@@ -1,59 +1,34 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
-    int myAtoi(char *s) {
-        // Your code here
-         long long ans = 0;
-    int sign = 1; // Default to positive
-    int started = 0; // To track if the number parsing has started
-
-    // Skip leading whitespace
-    while (*s == ' ') {
-        s++;
-    }
-
-    // Check for sign
-    if (*s == '-' || *s == '+') {
-        sign = (*s == '-') ? -1 : 1;
-        s++;
-    }
-
-    // Parse digits
-    while (*s >= '0' && *s <= '9') {
-        ans = ans * 10 + (*s - '0');
-
-        // Clamp the value to avoid overflow
-        if (ans * sign > INT_MAX) {
-            return INT_MAX;
+    int Digit(char ch){
+        if(ch-'0' >= 0 && ch-'0' <= 9){
+            return ch-'0';
         }
-        if (ans * sign < INT_MIN) {
+        return -1;
+    }
+    int myAtoi(string &s) {
+        // code here
+        long int num = 0;
+        int sign = 1;
+        for(int i=0; i<s.length(); i++){
+            if(s[i] == '-' && num == 0) sign = -1;
+            
+            int digit = Digit(s[i]);
+            if(digit == -1 && num> 0) break;
+            
+            else if(digit != -1){
+                num = num*10+digit;
+            }else{
+                continue; // this is white space part
+            }
+        }
+        
+        num = num*sign;
+        if(num >= INT_MAX || num <= INT_MIN){
+            if(num > 0) return INT_MAX;
             return INT_MIN;
         }
-
-        s++;
-        started = 1;
-    }
-
-    return (int)(ans * sign);
+        
+        return num;
     }
 };
-
-//{ Driver Code Starts.
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        char s[20];
-        cin >> s;
-        Solution ob;
-        int ans = ob.myAtoi(s);
-        cout << ans << endl;
-        cout << "~" << endl;
-    }
-}
-// } Driver Code Ends
